@@ -17,11 +17,45 @@ export default class LobbyController extends cc.Component {
 
     @property(cc.Toggle)
     musicToggler : cc.Toggle = null;
-    musictogglerValue : boolean = null;
+    musictogglerValue : boolean = true;
 
     @property(cc.Toggle)
     sfxToggler : cc.Toggle = null;
-    sfxtogglerValue : boolean = null;
+    sfxtogglerValue : boolean = true;
+    
+    @property(cc.Button)
+    ExitPrefab : cc.Button = null;
+    
+    
+    BgSFXstoredValue = cc.sys.localStorage.getItem("BgSFX");
+    AudioSFXstoredValue = cc.sys.localStorage.getItem("AudioSFX");
+
+
+    protected start(): void {
+
+        this.musictogglerValue = this.BgSFXstoredValue === "true";
+        if (this.musictogglerValue == false) {
+            this.musicToggler.getComponent(cc.Toggle).uncheck();
+            cc.log(this.sfxToggler.getComponent(cc.Toggle).isChecked + " is the value of BgSFXtoggler after if");
+        } else if (this.musictogglerValue == true) {
+            this.musicToggler.getComponent(cc.Toggle).check();
+            cc.log(this.musicToggler.getComponent(cc.Toggle).isChecked + " is the value of BgSFXtoggler after if");
+        }
+    
+
+
+
+        this.sfxtogglerValue = this.AudioSFXstoredValue === "true";
+        if (this.sfxtogglerValue == false) {
+            this.sfxToggler.getComponent(cc.Toggle).uncheck();
+            cc.log(this.sfxToggler.getComponent(cc.Toggle).isChecked + " is the value of AudioSFXtoggler after if");
+        } else if (this.sfxtogglerValue == true) {
+            this.sfxToggler.getComponent(cc.Toggle).check();
+            cc.log(this.sfxToggler.getComponent(cc.Toggle).isChecked + " is the value of AudioSFXtoggler after if");
+        }
+    
+    }
+    
 
     
     onClickPlayButton(){
@@ -30,9 +64,7 @@ export default class LobbyController extends cc.Component {
     }
 
     onbgMusicToggled(){
-        cc.log("BG music toggler Pressed ")
         this.musictogglerValue = this.musicToggler.getComponent(cc.Toggle).isChecked
-        cc.log(this.musictogglerValue + "this is hehe")
         AudioManager.getInstance().bgSFXtoggle(this.musictogglerValue);
     }
 
@@ -40,6 +72,10 @@ export default class LobbyController extends cc.Component {
         this.sfxtogglerValue = this.sfxToggler.getComponent(cc.Toggle).isChecked
         AudioManager.getInstance().buttonSFXtoggle(this.sfxtogglerValue);  
 
+    }
+
+    onExitClick(){
+        SceneManager.getInstance().exitGame();
     }
 
 }

@@ -38,6 +38,8 @@ export default class SceneManager extends cc.Component {
 
 
 
+
+
     private lobbyInstance :cc.Node = null;
     private progressInstance : cc.Node = null;
     private gameInstance : cc.Node = null;
@@ -85,9 +87,12 @@ export default class SceneManager extends cc.Component {
         this.progressInstance.destroy();   
     }
 
+    exitGame(){
+        cc.game.end();
+        cc.log("Game ended ")
+    }
 
-
-
+    
 
 
 }

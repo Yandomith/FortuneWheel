@@ -26,7 +26,7 @@ export default class AudioManager extends cc.Component {
     buttonSFXNode : cc.Node = null;
 
     SFXvalue: boolean= null;
-    
+
     @property(cc.Node)
     wheelSFXNode : cc.Node = null;
 
@@ -41,13 +41,10 @@ export default class AudioManager extends cc.Component {
         this.bgSFXNode.getComponent(cc.AudioSource).play()
     }
 
-    
-
-    
-
-    bgSFXtoggle(isChecked: Boolean){
-        cc.log(isChecked)
-        if (isChecked) {
+    bgSFXtoggle(musictogglerValue: Boolean){
+        cc.log(musictogglerValue)
+        cc.sys.localStorage.setItem("BgSFX",musictogglerValue )
+        if (musictogglerValue) {
             this.bgSFXNode.getComponent(cc.AudioSource).resume()
         } else {
             this.bgSFXNode.getComponent(cc.AudioSource).pause()
@@ -55,25 +52,20 @@ export default class AudioManager extends cc.Component {
     }
 
 
-    buttonSFXtoggle(isChecked:boolean){
-        this.SFXvalue = isChecked  
-        cc.log("sfx is toggled ") 
-        cc.log("sfx value in ButtonSFXtoggle "+ this.SFXvalue)    
+    buttonSFXtoggle(sfxtogglerValue:boolean){
+        this.SFXvalue = sfxtogglerValue  
+        cc.sys.localStorage.setItem("AudioSFX", this.SFXvalue )
+        cc.log("sfx is toggled ")  
     }
 
-    protected update(): void {
-        cc.sys.localStorage.setItem("hehe", this.SFXvalue )
-        cc.log(cc.sys.localStorage.getItem("hehe") +" I am saved in local disk")
-    }
+
 
     sfxEffect(){
-        cc.log("sfx value in sfxEffect "+ this.SFXvalue)   
         if(this.SFXvalue){
             this.buttonSFXNode.getComponent(cc.AudioSource).play()
         }
     }
     WheelsfxEffect(){
-        cc.log("sfx value in sfxEffect "+ this.SFXvalue)   
         if(this.SFXvalue){
             this.wheelSFXNode.getComponent(cc.AudioSource).play()
         }
