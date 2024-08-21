@@ -25,7 +25,9 @@ export default class AudioManager extends cc.Component {
     @property(cc.Node)
     buttonSFXNode : cc.Node = null;
 
-    SFXvalue: boolean= null;
+    BgSFXvalue: Boolean= null;
+    AudioSFXvalue: Boolean= null;
+    boolBGSFX : Boolean = null;
 
     @property(cc.Node)
     wheelSFXNode : cc.Node = null;
@@ -38,35 +40,54 @@ export default class AudioManager extends cc.Component {
             return;
         }
         AudioManager.instance = this; 
-        this.bgSFXNode.getComponent(cc.AudioSource).play()
+        const hehe = cc.sys.localStorage.getItem("BgSFX") 
+        this.boolBGSFX = hehe === "true";
+
+        if(this.boolBGSFX){
+            cc.log(this.boolBGSFX+ " this is value of BgSFX in start for loging music ")
+            this.bgSFXNode.getComponent(cc.AudioSource).play()
+        }else{
+            cc.log(this.boolBGSFX+ " this is value of BgSFX in start for loging music in else")
+        }
     }
 
+    protected onLoad(): void {
+
+    }
+
+
     bgSFXtoggle(musictogglerValue: Boolean){
-        cc.log(musictogglerValue)
-        cc.sys.localStorage.setItem("BgSFX",musictogglerValue )
-        if (musictogglerValue) {
+        this.BgSFXvalue = musictogglerValue  
+        this.bgSFXNode.getComponent(cc.AudioSource).play()
+
+        cc.sys.localStorage.setItem("BgSFX",this.BgSFXvalue )
+
+        if (this.BgSFXvalue) {
+            cc.log(this.BgSFXvalue)
             this.bgSFXNode.getComponent(cc.AudioSource).resume()
         } else {
-            this.bgSFXNode.getComponent(cc.AudioSource).pause()
+
+                this.bgSFXNode.getComponent(cc.AudioSource).pause()
+
         }
     }
 
 
-    buttonSFXtoggle(sfxtogglerValue:boolean){
-        this.SFXvalue = sfxtogglerValue  
-        cc.sys.localStorage.setItem("AudioSFX", this.SFXvalue )
+    buttonSFXtoggle(sfxtogglerValue:Boolean){
+        this.AudioSFXvalue = sfxtogglerValue  
+        cc.sys.localStorage.setItem("AudioSFX", this.AudioSFXvalue )
         cc.log("sfx is toggled ")  
     }
 
 
 
     sfxEffect(){
-        if(this.SFXvalue){
+        if(this.AudioSFXvalue){
             this.buttonSFXNode.getComponent(cc.AudioSource).play()
         }
     }
     WheelsfxEffect(){
-        if(this.SFXvalue){
+        if(this.AudioSFXvalue){
             this.wheelSFXNode.getComponent(cc.AudioSource).play()
         }
     }

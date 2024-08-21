@@ -33,6 +33,8 @@ export default class LobbyController extends cc.Component {
 
     protected start(): void {
 
+
+
         this.musictogglerValue = this.BgSFXstoredValue === "true";
         if (this.musictogglerValue == false) {
             this.musicToggler.getComponent(cc.Toggle).uncheck();

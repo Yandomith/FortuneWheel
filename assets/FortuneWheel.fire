@@ -81,10 +81,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 14
+        "__id__": 16
       },
       {
-        "__id__": 15
+        "__id__": 17
       }
     ],
     "_prefab": null,
@@ -332,7 +332,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 13
+        "__id__": 15
       }
     ],
     "_prefab": null,
@@ -456,11 +456,11 @@
     "_clip": {
       "__uuid__": "95cb5adc-a857-41bf-8a8d-a1ae5f131f3f"
     },
-    "_volume": 0.1,
+    "_volume": 0.5,
     "_mute": false,
     "_loop": true,
     "_firstlyEnabled": true,
-    "playOnLoad": true,
+    "playOnLoad": false,
     "preload": true,
     "_id": "b0UX83LSxOcoVaHPGThcvn"
   },
@@ -474,6 +474,9 @@
     "_children": [
       {
         "__id__": 11
+      },
+      {
+        "__id__": 13
       }
     ],
     "_active": true,
@@ -608,6 +611,87 @@
     "_id": "f142f2/tZAza6CAIqnckuB"
   },
   {
+    "__type__": "cc.Node",
+    "_name": "WheelSFX",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 10
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 14
+      }
+    ],
+    "_prefab": null,
+    "_opacity": 255,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 255,
+      "g": 255,
+      "b": 255,
+      "a": 255
+    },
+    "_contentSize": {
+      "__type__": "cc.Size",
+      "width": 0,
+      "height": 0
+    },
+    "_anchorPoint": {
+      "__type__": "cc.Vec2",
+      "x": 0.5,
+      "y": 0.5
+    },
+    "_trs": {
+      "__type__": "TypedArray",
+      "ctor": "Float64Array",
+      "array": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "_eulerAngles": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_skewX": 0,
+    "_skewY": 0,
+    "_is3DNode": false,
+    "_groupIndex": 0,
+    "groupIndex": 0,
+    "_id": "24jzazGzpKTajc+yJ+71Tq"
+  },
+  {
+    "__type__": "cc.AudioSource",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 13
+    },
+    "_enabled": true,
+    "_clip": {
+      "__uuid__": "a8cebc07-72bc-4701-b959-7e4cca555641"
+    },
+    "_volume": 1,
+    "_mute": false,
+    "_loop": false,
+    "_firstlyEnabled": true,
+    "playOnLoad": false,
+    "preload": false,
+    "_id": "904tkqHYxKwpYUJqg3enVT"
+  },
+  {
     "__type__": "9dfa8PRRIBHUabc6Lfq0so8",
     "_name": "",
     "_objFlags": 0,
@@ -621,7 +705,9 @@
     "buttonSFXNode": {
       "__id__": 11
     },
-    "wheelSFXNode": null,
+    "wheelSFXNode": {
+      "__id__": 13
+    },
     "_id": "9acIZvmLBGx7rfEDXd59YE"
   },
   {
