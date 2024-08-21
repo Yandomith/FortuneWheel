@@ -1,0 +1,38 @@
+{
+  "ver": "2.3.7",
+  "uuid": "e5a26616-ccca-42f4-b33e-cbe21e77821f",
+  "importer": "texture",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 450,
+  "height": 283,
+  "platformSettings": {},
+  "subMetas": {
+    "203700970-3d-illustration-of-red-casino-chips-over-black-background-with-space-for-your-text": {
+      "ver": "1.0.6",
+      "uuid": "8933a97a-a31a-4da4-a006-697f3734c675",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "e5a26616-ccca-42f4-b33e-cbe21e77821f",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 450,
+      "height": 283,
+      "rawWidth": 450,
+      "rawHeight": 283,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
