@@ -77,7 +77,12 @@ export default class LobbyController extends cc.Component {
     }
 
     onClickShopOpen(){
+        
         this.shop.active = true;
+        this.shop.scale = 0
+        cc.tween(this.shop)
+            .to(.1, {scale : 1})
+            .start()
     }
 
     onbgMusicToggled(){

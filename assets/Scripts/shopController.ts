@@ -20,13 +20,24 @@ export default class ShopController extends cc.Component {
     @property(cc.Button)
     buy30Button : cc.Node= null;
 
+    @property(cc.Node)
+    coinStat : cc.Node= null ;
+
+
 
     onClickShopClose(){
-        this.node.active =false;
+        cc.tween(this.node)
+            .to(.1, {scale : 0})
+            .call(()=>{
+                this.node.active =false;
+            })
+            .start()
+       
     }
     
     onClickbuy5(){
         cc.log( " bought 5 ");
+        this.coinStat.getComponent(cc.Label).string = ""
         
     }
     onClickbuy15(){
