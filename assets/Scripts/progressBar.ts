@@ -36,8 +36,8 @@ export default class progressBar extends cc.Component {
 
         }else{
             cc.tween(this.progressBar)
-                    .to(3, { progress: .5  },{easing:"easeInOut"})
-                    .to(3, { progress: 1  },{easing:"easeOut"})
+                    .to(0.5, { progress: .5  },{easing:"easeInOut"})
+                    .to(1, { progress: 1  },{easing:"easeOut"})
                     .call(() =>{
                         if (this.isfromMenu) {
                             SceneManager.getInstance().loadGamePrefab();

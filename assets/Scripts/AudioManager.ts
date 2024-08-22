@@ -1,6 +1,11 @@
 
 const {ccclass, property} = cc._decorator;
 
+
+const audioQues = {
+    SET :""
+}
+
 @ccclass
 export default class AudioManager extends cc.Component {
     private static instance : AudioManager =  null;
@@ -68,7 +73,6 @@ export default class AudioManager extends cc.Component {
         } else {
 
                 this.bgSFXNode.getComponent(cc.AudioSource).pause()
-
         }
     }
 
@@ -78,7 +82,6 @@ export default class AudioManager extends cc.Component {
         cc.sys.localStorage.setItem("AudioSFX", this.AudioSFXvalue )
         cc.log("sfx is toggled ")  
     }
-
 
 
     sfxEffect(){

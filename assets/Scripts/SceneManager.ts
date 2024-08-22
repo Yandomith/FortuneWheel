@@ -36,6 +36,10 @@ export default class SceneManager extends cc.Component {
     @property(cc.Prefab)
     gamePrefab: cc.Prefab = null;
 
+    @property(cc.Prefab)
+    DoublegamePrefab: cc.Prefab = null;
+
+
 
 
 
@@ -43,6 +47,7 @@ export default class SceneManager extends cc.Component {
     private lobbyInstance :cc.Node = null;
     private progressInstance : cc.Node = null;
     private gameInstance : cc.Node = null;
+    
 
 
 
