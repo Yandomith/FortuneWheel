@@ -40,17 +40,10 @@ export default class SceneManager extends cc.Component {
     DoublegamePrefab: cc.Prefab = null;
 
 
-
-
-
-
     private lobbyInstance :cc.Node = null;
     private progressInstance : cc.Node = null;
     private gameInstance : cc.Node = null;
-    
-
-
-
+    DoublegameInstance: cc.Node = null;
     
 
     protected start(): void {
@@ -83,6 +76,14 @@ export default class SceneManager extends cc.Component {
     loadGamePrefab(){
         this.gameInstance = cc.instantiate(this.gamePrefab)
         this.node.addChild(this.gameInstance)
+
+        this.progressInstance.destroy(); 
+    }
+
+    loadDoubleGamePrefab(){
+        this.DoublegameInstance = cc.instantiate(this.DoublegamePrefab)
+        this.node.addChild(this.DoublegameInstance)
+  
         this.progressInstance.destroy(); 
     }
     

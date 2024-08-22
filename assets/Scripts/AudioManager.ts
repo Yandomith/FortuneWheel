@@ -2,9 +2,9 @@
 const {ccclass, property} = cc._decorator;
 
 
-const audioQues = {
-    SET :""
-}
+// const audioQues = {
+//     SET :""
+// }
 
 @ccclass
 export default class AudioManager extends cc.Component {
@@ -47,7 +47,6 @@ export default class AudioManager extends cc.Component {
         AudioManager.instance = this; 
         const hehe = cc.sys.localStorage.getItem("BgSFX") 
         this.boolBGSFX = hehe === "true";
-
         if(this.boolBGSFX){
             cc.log(this.boolBGSFX+ " this is value of BgSFX in start for loging music ")
             this.bgSFXNode.getComponent(cc.AudioSource).play()

@@ -32,7 +32,6 @@ export default class progressBar extends cc.Component {
         cc.log("isfromMenu is " + isfromMenu)
         if (this.progressBar.progress == 1 ){
 
-            
 
         }else{
             cc.tween(this.progressBar)
@@ -44,15 +43,15 @@ export default class progressBar extends cc.Component {
                         }else{
                             SceneManager.getInstance().loadLobbyPrefab();
                         }
-
-                        
                     })
                     .start()
         }   
     }
+    
     public setIsfromMenu(value:boolean){
         this.isfromMenu=value
         cc.log("this is setisfromMenu" + this.isfromMenu)
     }
+ 
     
 }   

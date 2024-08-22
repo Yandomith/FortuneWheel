@@ -15,6 +15,9 @@ export default class LobbyController extends cc.Component {
     @property (cc.Button)
     playButton : cc.Button = null;
 
+    @property (cc.Button)
+    DoubleplayButton : cc.Button = null;
+
     @property(cc.Toggle)
     musicToggler : cc.Toggle = null;
     musictogglerValue : boolean = true;
@@ -25,13 +28,20 @@ export default class LobbyController extends cc.Component {
     
     @property(cc.Button)
     ExitPrefab : cc.Button = null;
-    
+
+
+    @property(cc.Button)
+    openShop : cc.Button = null;
+
+    @property(cc.Node)
+    shop : cc.Node = null
     
     BgSFXstoredValue = cc.sys.localStorage.getItem("BgSFX");
     AudioSFXstoredValue = cc.sys.localStorage.getItem("AudioSFX");
 
 
     protected start(): void {
+        this.shop.active = false;
 
 
 
@@ -43,9 +53,6 @@ export default class LobbyController extends cc.Component {
             this.musicToggler.getComponent(cc.Toggle).check();
             cc.log(this.musicToggler.getComponent(cc.Toggle).isChecked + " is the value of BgSFXtoggler after if");
         }
-    
-
-
 
         this.sfxtogglerValue = this.AudioSFXstoredValue === "true";
         if (this.sfxtogglerValue == false) {
@@ -58,11 +65,19 @@ export default class LobbyController extends cc.Component {
     
     }
     
-
     
     onClickPlayButton(){
         AudioManager.getInstance().sfxEffect()
         SceneManager.getInstance().loadProgressPrefab(true);    
+    }
+
+    onClickDoublePlayButton(){
+        AudioManager.getInstance().sfxEffect()
+        SceneManager.getInstance().loadProgressPrefab(true);    
+    }
+
+    onClickShopOpen(){
+        this.shop.active = true;
     }
 
     onbgMusicToggled(){
