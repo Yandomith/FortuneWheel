@@ -1,3 +1,4 @@
+import coinManager from "./coinManager";
 
 const {ccclass, property} = cc._decorator;
 
@@ -24,7 +25,6 @@ export default class ShopController extends cc.Component {
     coinStat : cc.Node= null ;
 
 
-
     onClickShopClose(){
         cc.tween(this.node)
             .to(.1, {scale : 0})
@@ -37,8 +37,7 @@ export default class ShopController extends cc.Component {
     
     onClickbuy5(){
         cc.log( " bought 5 ");
-        this.coinStat.getComponent(cc.Label).string = ""
-        
+
     }
     onClickbuy15(){
         cc.log( " bought 15 ");

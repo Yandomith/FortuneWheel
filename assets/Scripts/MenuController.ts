@@ -1,22 +1,11 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-import SceneManager from "./SceneManager";
 import AudioManager from "./AudioManager";
+import SceneManager from "./SceneManager";
 
-const {ccclass, property} = cc._decorator;
-
-@ccclass
-export default class LobbyController extends cc.Component {
-
-    @property (cc.Button)
+const{ccclass, property} =cc._decorator;
+@ccclass 
+export default class MenuController extends cc.Component{
+    @property(cc.Button)
     playButton : cc.Button = null;
-
-    @property (cc.Button)
-    DoubleplayButton : cc.Button = null;
 
     @property(cc.Toggle)
     musicToggler : cc.Toggle = null;
@@ -27,7 +16,7 @@ export default class LobbyController extends cc.Component {
     sfxtogglerValue : boolean = true;
     
     @property(cc.Button)
-    ExitPrefab : cc.Button = null;
+    ExitButton : cc.Button = null;
 
 
     @property(cc.Button)
@@ -39,8 +28,11 @@ export default class LobbyController extends cc.Component {
     BgSFXstoredValue = cc.sys.localStorage.getItem("BgSFX");
     AudioSFXstoredValue = cc.sys.localStorage.getItem("AudioSFX");
 
+    getCoin = Number(cc.sys.localStorage.getItem("CoinCount") ) 
+
 
     protected start(): void {
+
         this.shop.active = false;
 
 
@@ -64,18 +56,6 @@ export default class LobbyController extends cc.Component {
         }
     
     }
-    
-    
-    onClickPlayButton(){
-        AudioManager.getInstance().sfxEffect()
-        SceneManager.getInstance().loadProgressPrefab(true);    
-    }
-
-    onClickDoublePlayButton(){
-        AudioManager.getInstance().sfxEffect()
-        SceneManager.getInstance().loadProgressPrefab(true);    
-    }
-
     onClickShopOpen(){
         
         this.shop.active = true;
@@ -96,8 +76,19 @@ export default class LobbyController extends cc.Component {
 
     }
 
+    onClickPlay(){
+        if (this.getCoin <= 0) {
+            cc.log("POOR fking Boy ")
+        } else {
+            SceneManager.getInstance().loadGame()
+        }
+        
+    }
+    
     onExitClick(){
         SceneManager.getInstance().exitGame();
     }
+
+
 
 }

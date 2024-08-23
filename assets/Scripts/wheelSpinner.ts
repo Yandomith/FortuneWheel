@@ -3,7 +3,7 @@ import SceneManager from "./SceneManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class wheelSpinner extends cc.Component {
     @property(cc.Node)
     buttonNode: cc.Node = null;
     @property(cc.Label)
@@ -41,15 +41,19 @@ export default class NewClass extends cc.Component {
     prizeLabels : string[] = null;
     prizeCount : number = null;
 
-    
+    lastResult: number = Number(cc.sys.localStorage.getItem("CoinCount"));
+    finalResult : string = null;
 
+    @property(cc.Node)
+    inputBlocker: cc.Node = null;
 
 
     protected start(): void {
-       this.prizeCount=  this.prizeLabelParent.children.length;
-       cc.log("this have "+ this.prizeCount);
+        this.inputBlocker.active= false
+        this.prizeCount=  this.prizeLabelParent.children.length;
+        cc.log("this have "+ this.prizeCount);
 
-        this.prizeLabels = [    ]
+        this.prizeLabels = [ ]
 
        for (let i = 0; i < this.prizeCount; i++) {
             
@@ -61,13 +65,16 @@ export default class NewClass extends cc.Component {
 
 
     onButtonClick(){
+
+       
+
         cc.log("Button Clicked")
         AudioManager.getInstance().WheelsfxEffect();
         AudioManager.getInstance().sfxEffect();  
 
         if (!this.isSpinning) {
             this.isSpinning = true;
-
+            this.inputBlocker.active= true
             let embedTween1 = cc.tween(this.pointerNode)
             .to(.2, { rotation: -45  },{easing:"easeIn"})
                 .to(.1, { rotation: 0  })
@@ -134,6 +141,7 @@ export default class NewClass extends cc.Component {
 
     displayResult()
     {
+        this.inputBlocker.active= false
         cc.log("hehe")
         this.result = (this.lastValue % 360)* -1 + 360;
         this.seglength = 360/this.segmentNumber;
@@ -155,10 +163,14 @@ export default class NewClass extends cc.Component {
                 if (this.result >= this.startValue && this.result < this.endValue){
                     cc.log(this.prizeLabels[i])
                     this.displayLabel.string = this.prizeLabels[i];
+                    this.lastResult = this.lastResult + Number(this.prizeLabels[i])
                     break;
                 }
-            
         }
 
+        this.finalResult = this.lastResult.toString()
+        cc.sys.localStorage.setItem("CoinCount", this.finalResult )
+       
     }
+    
 }

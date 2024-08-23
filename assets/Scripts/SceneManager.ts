@@ -1,104 +1,78 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
-import GameController from "./GameController";
-import progressBar from "./progressBar";
-
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class SceneManager extends cc.Component {
-    private static instance : SceneManager =  null;
+    private static instance: SceneManager = null;
 
     public static getInstance(): SceneManager {
         if (!SceneManager.instance) {
-
             SceneManager.instance = cc.find('SceneManager')?.getComponent(SceneManager);
             if (!SceneManager.instance) {
-
                 const newSceneManager = new cc.Node('SceneManager');
                 SceneManager.instance = newSceneManager.addComponent(SceneManager);
-                cc.director.getScene().addChild(newSceneManager); 
+                cc.director.getScene().addChild(newSceneManager);
             }
         }
         return SceneManager.instance;
     }
 
     @property(cc.Prefab)
-    lobbyPrefab : cc.Prefab = null;
+    menuPrefab: cc.Prefab = null;
+
     @property(cc.Prefab)
-    progressPrefab : cc.Prefab = null ;
+    loadingPrefab: cc.Prefab = null;
 
     @property(cc.Prefab)
     gamePrefab: cc.Prefab = null;
 
-    @property(cc.Prefab)
-    DoublegamePrefab: cc.Prefab = null;
+    private currentPrefabInstance: cc.Node = null;
 
-
-    private lobbyInstance :cc.Node = null;
-    private progressInstance : cc.Node = null;
-    private gameInstance : cc.Node = null;
-    DoublegameInstance: cc.Node = null;
-    
+    protected onLoad() {
+        this.currentPrefabInstance = null;
+        this.loadMenu();
+    }
 
     protected start(): void {
-
-        
         if (SceneManager.instance) {
             cc.log('More than one instance of SceneManager found! Destroying this instance.');
             this.node.destroy();
             return;
         }
-        SceneManager.instance = this; 
-
-
-        this.lobbyInstance = cc.instantiate(this.lobbyPrefab)
-        this.node.addChild(this.lobbyInstance)
-    
-        // this.gameInstance = cc.instantiate(this.gamePrefab)
-        // this.node.addChild(this.gameInstance)
+        SceneManager.instance = this;
     }
 
-    loadProgressPrefab(isfromMenu : boolean){
-        cc.log("more hehe")
-        this.progressInstance = cc.instantiate(this.progressPrefab)
-        this.progressInstance.getComponent(progressBar).setIsfromMenu(isfromMenu)
-        this.node.addChild(this.progressInstance)
-        this.gameInstance.destroy(); 
-        this.lobbyInstance.destroy();
+
+    loadMenu() {
+        cc.log("Instancing Menu")
+        this.loadPrefab(this.menuPrefab);
     }
 
-    loadGamePrefab(){
-        this.gameInstance = cc.instantiate(this.gamePrefab)
-        this.node.addChild(this.gameInstance)
-
-        this.progressInstance.destroy(); 
+    loadGame() {
+        this.loadLoading(this.gamePrefab);
     }
 
-    loadDoubleGamePrefab(){
-        this.DoublegameInstance = cc.instantiate(this.DoublegamePrefab)
-        this.node.addChild(this.DoublegameInstance)
-  
-        this.progressInstance.destroy(); 
+    loadLoading(nextPrefab: cc.Prefab) {
+        this.loadPrefab(this.loadingPrefab);
+
+        cc.log("I am loading from SceneManager");
+        this.scheduleOnce(() => {
+            this.loadPrefab(nextPrefab);
+        }, 1);
     }
-    
-    loadLobbyPrefab(){
-        this.lobbyInstance = cc.instantiate(this.lobbyPrefab)
-        this.node.addChild(this.lobbyInstance)
-        this.progressInstance.destroy();   
+
+    loadPrefab(prefab: cc.Prefab) {
+        if (this.currentPrefabInstance) {
+            this.currentPrefabInstance.destroy();
+        }
+
+        this.currentPrefabInstance = cc.instantiate(prefab);
+        this.node.addChild(this.currentPrefabInstance);
+    }
+    onGameBackButtonClick() {
+        this.loadLoading(this.menuPrefab); 
     }
 
     exitGame(){
         cc.game.end();
-        cc.log("Game ended ")
     }
-
-    
-
-
 }
