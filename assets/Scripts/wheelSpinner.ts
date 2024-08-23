@@ -66,8 +66,6 @@ export default class wheelSpinner extends cc.Component {
 
     onButtonClick(){
 
-       
-
         cc.log("Button Clicked")
         AudioManager.getInstance().WheelsfxEffect();
         AudioManager.getInstance().sfxEffect();  
