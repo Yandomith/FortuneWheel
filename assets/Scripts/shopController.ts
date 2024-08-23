@@ -1,5 +1,3 @@
-import coinManager from "./coinManager";
-
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -33,6 +31,9 @@ export default class ShopController extends cc.Component {
             })
             .start()
        
+    }
+    onClick(event :cc.Event , data: string){
+        
     }
     
     onClickbuy5(){

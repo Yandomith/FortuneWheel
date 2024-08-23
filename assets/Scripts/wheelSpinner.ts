@@ -1,4 +1,5 @@
 import AudioManager from "./AudioManager";
+import MessageTrigger from "./MessageTrigger";
 import SceneManager from "./SceneManager";
 const { ccclass, property } = cc._decorator;
 
@@ -46,12 +47,21 @@ export default class wheelSpinner extends cc.Component {
 
     @property(cc.Node)
     inputBlocker: cc.Node = null;
+    
+    @property(cc.Label)
+    messageDisplay : cc.Label = null ;
+
+
+    public onMessageTrigger(){
+        
+    }
 
 
     protected start(): void {
         this.inputBlocker.active= false
         this.prizeCount=  this.prizeLabelParent.children.length;
         cc.log("this have "+ this.prizeCount);
+        
 
         this.prizeLabels = [ ]
 
@@ -65,7 +75,12 @@ export default class wheelSpinner extends cc.Component {
 
 
     onButtonClick(){
-
+        if (this.lastResult < 10) {
+            this.messageDisplay.getComponent(cc.Animation).play()
+        } else {
+        
+        this.lastResult -= 10
+        cc.sys.localStorage.setItem("CoinCount", this.lastResult)
         cc.log("Button Clicked")
         AudioManager.getInstance().WheelsfxEffect();
         AudioManager.getInstance().sfxEffect();  
@@ -109,6 +124,7 @@ export default class wheelSpinner extends cc.Component {
                     
             })
         .start();
+            }
         }
     }
    

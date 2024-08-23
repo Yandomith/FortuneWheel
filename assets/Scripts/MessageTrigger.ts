@@ -8,9 +8,6 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class MessageTrigger extends cc.Component {
 
-    OnclickReset(){
-        cc.sys.localStorage.setItem("CoinCount" , 20)
-    }
 }

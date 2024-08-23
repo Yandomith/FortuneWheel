@@ -3314,7 +3314,7 @@
         "__id__": 136
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 146
@@ -4053,7 +4053,7 @@
     },
     "component": "",
     "_componentId": "87dd55EpsFLhYDlRuQb6Tfx",
-    "handler": "onClickbuy5",
+    "handler": "onClick",
     "customEventData": ""
   },
   {

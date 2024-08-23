@@ -28,14 +28,10 @@ export default class MenuController extends cc.Component{
     BgSFXstoredValue = cc.sys.localStorage.getItem("BgSFX");
     AudioSFXstoredValue = cc.sys.localStorage.getItem("AudioSFX");
 
-    getCoin = Number(cc.sys.localStorage.getItem("CoinCount") ) 
-
-
+    
     protected start(): void {
 
         this.shop.active = false;
-
-
 
         this.musictogglerValue = this.BgSFXstoredValue === "true";
         if (this.musictogglerValue == false) {
@@ -77,11 +73,8 @@ export default class MenuController extends cc.Component{
     }
 
     onClickPlay(){
-        if (this.getCoin <= 0) {
-            cc.log("POOR fking Boy ")
-        } else {
+        
             SceneManager.getInstance().loadGame()
-        }
         
     }
     
