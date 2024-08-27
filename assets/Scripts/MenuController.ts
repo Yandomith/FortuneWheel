@@ -1,87 +1,84 @@
 import AudioManager from "./AudioManager";
 import SceneManager from "./SceneManager";
 
-const{ccclass, property} =cc._decorator;
-@ccclass 
-export default class MenuController extends cc.Component{
+const { ccclass, property } = cc._decorator;
+
+@ccclass
+export default class MenuController extends cc.Component {
     @property(cc.Button)
-    playButton : cc.Button = null;
+    playButton: cc.Button = null;
 
     @property(cc.Toggle)
-    musicToggler : cc.Toggle = null;
-    musictogglerValue : boolean = true;
+    musicToggler: cc.Toggle = null;
 
     @property(cc.Toggle)
-    sfxToggler : cc.Toggle = null;
-    sfxtogglerValue : boolean = true;
-    
-    @property(cc.Button)
-    ExitButton : cc.Button = null;
-
+    sfxToggler: cc.Toggle = null;
 
     @property(cc.Button)
-    openShop : cc.Button = null;
+    exitButton: cc.Button = null;
+
+    @property(cc.Button)
+    openShopButton: cc.Button = null;
 
     @property(cc.Node)
-    shop : cc.Node = null
-    
-    BgSFXstoredValue = cc.sys.localStorage.getItem("BgSFX");
-    AudioSFXstoredValue = cc.sys.localStorage.getItem("AudioSFX");
+    shop: cc.Node = null;
 
-    
-    protected start(): void {
+    bgSFXStoredValue: boolean 
+    audioSFXStoredValue: boolean 
 
+
+    protected onLoad(): void {
         this.shop.active = false;
+        this.initializeToggles();
 
-        this.musictogglerValue = this.BgSFXstoredValue === "true";
-        if (this.musictogglerValue == false) {
-            this.musicToggler.getComponent(cc.Toggle).uncheck();
-            cc.log(this.sfxToggler.getComponent(cc.Toggle).isChecked + " is the value of BgSFXtoggler after if");
-        } else if (this.musictogglerValue == true) {
-            this.musicToggler.getComponent(cc.Toggle).check();
-            cc.log(this.musicToggler.getComponent(cc.Toggle).isChecked + " is the value of BgSFXtoggler after if");
-        }
-
-        this.sfxtogglerValue = this.AudioSFXstoredValue === "true";
-        if (this.sfxtogglerValue == false) {
-            this.sfxToggler.getComponent(cc.Toggle).uncheck();
-            cc.log(this.sfxToggler.getComponent(cc.Toggle).isChecked + " is the value of AudioSFXtoggler after if");
-        } else if (this.sfxtogglerValue == true) {
-            this.sfxToggler.getComponent(cc.Toggle).check();
-            cc.log(this.sfxToggler.getComponent(cc.Toggle).isChecked + " is the value of AudioSFXtoggler after if");
-        }
-    
     }
-    onClickShopOpen(){
+
+    public initializeToggles(): void {
+        this.bgSFXStoredValue = cc.sys.localStorage.getItem("BgSFX") === "true";
+        this.audioSFXStoredValue = cc.sys.localStorage.getItem("AudioSFX") === "true";
+        this.musicToggler.isChecked = this.bgSFXStoredValue;
+        this.sfxToggler.isChecked = this.audioSFXStoredValue;
         
+    }
+
+    public onClickShopOpen(): void {
         this.shop.active = true;
-        this.shop.scale = 0
+        this.shop.scale = 0;
         cc.tween(this.shop)
-            .to(.1, {scale : 1})
-            .start()
+            .to(0.1, { scale: 1 })
+            .start();
     }
 
-    onbgMusicToggled(){
-        this.musictogglerValue = this.musicToggler.getComponent(cc.Toggle).isChecked
-        AudioManager.getInstance().bgSFXtoggle(this.musictogglerValue);
-    }
-
-    onSFXToggled(){
-        this.sfxtogglerValue = this.sfxToggler.getComponent(cc.Toggle).isChecked
-        AudioManager.getInstance().buttonSFXtoggle(this.sfxtogglerValue);  
-
-    }
-
-    onClickPlay(){
-        
-            SceneManager.getInstance().loadGame()
-        
+    public onBgMusicToggled(): void {
+        const isMusicEnabled = this.musicToggler.isChecked;
+        AudioManager.getInstance().bgSFXtoggle(isMusicEnabled);
+        cc.sys.localStorage.setItem("BgSFX", String(isMusicEnabled));
     }
     
-    onExitClick(){
+    public onSFXToggled(): void {
+        const isSFXEnabled = this.sfxToggler.isChecked;
+        AudioManager.getInstance().buttonSFXtoggle(isSFXEnabled);
+        cc.sys.localStorage.setItem("AudioSFX", String(isSFXEnabled));
+    }
+    
+
+    public onClickPlay(): void {
+        SceneManager.getInstance().loadGame();
+    }
+
+    public onExitClick(): void {
         SceneManager.getInstance().exitGame();
     }
 
+    protected onDestroy(): void {
+        this.saveAudioSettings();
+    }
 
+    private saveAudioSettings(): void {
+        const isMusicEnabled = this.musicToggler.isChecked;
+        const isSFXEnabled = this.sfxToggler.isChecked;
 
+        cc.sys.localStorage.setItem("BgSFX", String(isMusicEnabled));
+        cc.sys.localStorage.setItem("AudioSFX", String(isSFXEnabled));
+    }
 }

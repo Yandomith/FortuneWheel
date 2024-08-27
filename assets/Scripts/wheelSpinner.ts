@@ -1,12 +1,15 @@
 import AudioManager from "./AudioManager";
+import { GAME_STATE } from "./GameConfig";
 import MessageTrigger from "./MessageTrigger";
 import SceneManager from "./SceneManager";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class wheelSpinner extends cc.Component {
+export default class WheelSpinner extends cc.Component {
     @property(cc.Node)
     buttonNode: cc.Node = null;
+
     @property(cc.Label)
     displayLabel: cc.Label = null;
 
@@ -19,172 +22,271 @@ export default class wheelSpinner extends cc.Component {
     @property(cc.Node)
     pointerNode: cc.Node = null;
 
-    isSpinning : boolean = false;
-    shouldSpin : boolean= false;
-    isAccelerating: boolean = false;
-    isDecelerating: boolean = false;
-    finalRotation :number = 0;
-    initialTweenDuration : number= 3
-    hasSpun: boolean = false;
-    newDefaultRotation: number = 0;
-    randomDelAngle: number= 0 ;
-    result : number = 0 ;
+    isSpinning: boolean = false;
+    hasStopped: boolean = false;
+    finalRotation: number = 0;
+    initialTweenDuration: number = 3;
+    randomDelAngle: number = 0;
+    result: number = 0;
     lastValue: number = 0;
 
-    segmentNumber : number = 8 ;
-    startValue : number = 0;
-    endValue: number = 0;
-    seglength : number = 0;
+    segmentNumber: number = 8;
+    segLength: number = 0;
 
     @property(cc.Node)
-    prizeLabelParent :cc.Node = null;
+    prizeLabelParent: cc.Node = null;
 
-    prizeLabels : string[] = null;
-    prizeCount : number = null;
+    prizeLabels: string[] = [];
+    prizeCount: number = 0;
 
-    lastResult: number = Number(cc.sys.localStorage.getItem("CoinCount"));
-    finalResult : string = null;
+    lastResult: number = Number(cc.sys.localStorage.getItem("CoinCount")) || 0;
+    finalResult: string = null;
 
     @property(cc.Node)
     inputBlocker: cc.Node = null;
-    
+
     @property(cc.Label)
-    messageDisplay : cc.Label = null ;
+    messageDisplay: cc.Label = null;
 
+    @property(cc.Label)
+    timerDisplay: cc.Label = null;
 
-    public onMessageTrigger(){
+    IamRandom : number = null;
+
+    playCost : number = 10;
         
-    }
+    @property (cc.Node)
+    coinMessage : cc.Node = null;
 
+    RespinGenerate : number = null;
+    jackpotGenerate: number = null;
+
+    jackpotReward: number= 50;
+    jackpotWonValue: number = null;
+
+    @property (cc.Button)
+    increseBetButton : cc.Button = null;
+
+    @property (cc.Button)
+    decreseBetButton : cc.Button = null;
+
+    @property (cc.Node)
+    BetPriceNode : cc.Node = null;
+
+
+    // gameState = GAME_STATE.Idle
 
     protected start(): void {
-        this.inputBlocker.active= false
-        this.prizeCount=  this.prizeLabelParent.children.length;
-        cc.log("this have "+ this.prizeCount);
-        
+        this.inputBlocker.active = false;
+        this.prizeCount = this.prizeLabelParent.children.length;
+        for (let i = 0; i < this.prizeCount; i++) {
+            this.prizeLabels.push(this.prizeLabelParent.children[i].getComponent(cc.Label).string);
+            cc.log(this.prizeLabels[i]+" these are the values " )
+        }
 
-        this.prizeLabels = [ ]
+        // cc.log("I am printing this from start from GAME_STATE  and Game State is  " + this.gameState )
 
-       for (let i = 0; i < this.prizeCount; i++) {
-            
-            this.prizeLabels.push( this.prizeLabelParent.children[i].getComponent(cc.Label).string);
-            cc.log("Values are  "+ this.prizeLabels[i])
-       }
-        
+
+    
     }
 
-
-    onButtonClick(){
-        if (this.lastResult < 10) {
-            this.messageDisplay.getComponent(cc.Animation).play()
-        } else {
+    onButtonClick() {
+        // this.gameState = GAME_STATE.Spinning
         
-        this.lastResult -= 10
-        cc.sys.localStorage.setItem("CoinCount", this.lastResult)
-        cc.log("Button Clicked")
-        AudioManager.getInstance().WheelsfxEffect();
-        AudioManager.getInstance().sfxEffect();  
+        //guard clause
+        // if(this.gameState == GAME_STATE.Spinning)
+        //     return;
 
-        if (!this.isSpinning) {
-            this.isSpinning = true;
-            this.inputBlocker.active= true
-            let embedTween1 = cc.tween(this.pointerNode)
-            .to(.2, { rotation: -45  },{easing:"easeIn"})
-                .to(.1, { rotation: 0  })
+        
+        if (this.lastResult < this.playCost) {
+            this.messageDisplay.getComponent(cc.Animation).play();
 
-            let embedTween = cc.tween(this.pointerNode)
-            .to(.1, { rotation: -45  },{easing:"easeIn"})
-                .to(.025, { rotation: 0  })
+        } else {
+            this.lastResult -= this.playCost;
+            this.coinMessage.getComponent(cc.Label).string = "-"+ this.playCost.toString()
+            this.coinMessage.getComponent(cc.Animation).play();
 
-            cc.tween(this.pointerNode)
-                .to(.2, { rotation: -45  },{easing:"easeIn"})
-                .repeat(6,embedTween1)
-                .repeat(34,embedTween)
-                .to(.05, { rotation: -45  },{easing:"easeIn"})
-                .repeat(5)
-                .to(.05, { rotation: 0  })
-                .start();
+            cc.sys.localStorage.setItem("CoinCount", this.lastResult.toString());
+            AudioManager.getInstance().playWheelSFX();
+            AudioManager.getInstance().playButtonSFX();
 
-
-            cc.tween(this.wheelNode)
-            .to(this.initialTweenDuration, {rotation: this.finalRotation + 200* (this.initialTweenDuration)}, {
-                   easing: "cubicIn"
-                })
-            .by(this.initialTweenDuration, {rotation:( 360* this.initialTweenDuration)})  
-          
-            .call(() => {
-                    this.finalRotation = this.wheelNode.rotation,
-                    cc.log(this.wheelNode.rotation + "this is final rotation after Acceleration ");
-                    
-                    this.isAccelerating = false;
-                    this.shouldSpin = false;
-                    this.isSpinning= false;
-                    this.startDeceleration();
-                    
-                    
-            })
-        .start();
+            if (!this.isSpinning) {
+                this.startSpin();
             }
         }
     }
-   
-    startDeceleration(){
-        cc.log("Starting Decelaration");
-        this.randomDelAngle = Math.random()*3;
-        cc.log(this.randomDelAngle + "random value")
-        cc.tween()
-            .target(this.wheelNode)
-            .to(this.initialTweenDuration, {rotation: (this.finalRotation) + ( 360 * this.randomDelAngle) /2
-            }, {
-                easing: "cubicOut"
-            })
+
+    startSpin() {
+        this.isSpinning = true;
+        this.hasStopped = false;
+        this.inputBlocker.active = true;
+
+        this.displayLabel.string = "Spinning Please Wait  "
+
+        this.animatePointer();
+        cc.log(this.wheelNode.rotation + " this is the rotation value before Spin")
+        cc.tween(this.wheelNode)
+            .to(this.initialTweenDuration, { rotation: this.finalRotation + 200 * this.initialTweenDuration }, { easing: "cubicIn" })
+            .by(this.initialTweenDuration, { rotation: 360 * this.initialTweenDuration })
             .call(() => {
-                this.lastValue = this.wheelNode.rotation
-                this.isDecelerating = false;
-                this.isSpinning = false;
-                cc.log(this.wheelNode.rotation + "this is final rotation after startDeceleration  ");
-                this.hasSpun = true;
-                cc.log("final rotation is " + this.finalRotation)
-                cc.log(" Result")
-                this.displayResult();
+                this.finalRotation = this.wheelNode.rotation;
+                cc.log(this.wheelNode.rotation + " this is the rotation value after Long Spin")
+                this.startDeceleration();
             })
             .start();
+    }
+
+    animatePointer() {
+        let embedTween1 = cc.tween(this.pointerNode)
+            .to(0.2, { rotation: -45 }, { easing: "easeIn" })
+            .to(0.1, { rotation: 0 });
+
+        let embedTween = cc.tween(this.pointerNode)
+            .to(0.1, { rotation: -45 }, { easing: "easeIn" })
+            .to(0.025, { rotation: 0 });
+
+        cc.tween(this.pointerNode)
+            .repeat(6, embedTween1)
+            .repeat(34, embedTween)
+            .to(0.05, { rotation: -45 }, { easing: "easeIn" })
+            .repeat(5)
+            .to(0.05, { rotation: 0 })
+            .start();
+    }
+
+    startDeceleration() {
+        this.randomDelAngle = Math.random() * 3;
+
+        cc.tween()
+            .target(this.wheelNode)
+            .to(this.initialTweenDuration, { rotation: this.finalRotation + (360 * this.randomDelAngle) / 2 }, { easing: "cubicOut" })
+            .call(() => {
+                this.lastValue = this.wheelNode.rotation;
+                this.hasStopped = true;
+                this.isSpinning = false;
+                this.displayResult();
+                cc.log(this.wheelNode.rotation + " this is the rotation value after Spin")
+
+
+            })
+            .start();
+    }
+
+    displayResult() {
+
+        this.result = (this.lastValue % 360) * -1 + 360;
+        this.segLength = 360 / this.segmentNumber;
+        let currentSegment = this.getSegment();
+        
+        this.displayLabel.string = "You got " + this.prizeLabels[currentSegment];   
+        this.updateCoinCount(currentSegment);
+        this.timerDisplay.getComponent(cc.Animation).play();
+        this.scheduleOnce(() => {
             
+            this.randomValue();
+            this.inputBlocker.active = false;
+        }, 2.5);
+        
 
     }
 
-    displayResult()
-    {
-        this.inputBlocker.active= false
-        cc.log("hehe")
-        this.result = (this.lastValue % 360)* -1 + 360;
-        this.seglength = 360/this.segmentNumber;
+    getSegment(): number {
+        let startValue = 360 - this.segLength / 2;
+        let endValue = this.segLength / 2;
 
-        this.startValue = 360-(this.seglength/2) ;
-        this.endValue = this.seglength / 2 ;
-        cc.log(this.result)
-        if (this.result >= this.startValue && this.result < this.endValue) {
-            cc.log(this.prizeLabels[0] + "is 1 when ")
-            this.displayLabel.string = this.prizeLabels[0];
-            return;
-        } 
-
-        for (let i = 1; i < this.segmentNumber; i++) {
-            this.startValue = this.endValue  ;
-            cc.log(this.startValue)
-            this.endValue= this.startValue+ this.seglength;
-            cc.log(this.endValue)
-                if (this.result >= this.startValue && this.result < this.endValue){
-                    cc.log(this.prizeLabels[i])
-                    this.displayLabel.string = this.prizeLabels[i];
-                    this.lastResult = this.lastResult + Number(this.prizeLabels[i])
-                    break;
-                }
+        if (this.result >= startValue || this.result < endValue) {
+            return 0;
         }
 
-        this.finalResult = this.lastResult.toString()
-        cc.sys.localStorage.setItem("CoinCount", this.finalResult )
-       
+        for (let i = 1; i < this.segmentNumber; i++) {
+            startValue = endValue;
+            endValue = startValue + this.segLength;
+            if (this.result >= startValue && this.result < endValue) {
+                return i;
+            }
+        }
+
+        return 0; 
     }
+
+    updateCoinCount(segment: number) {
+        const segmentLabel = this.prizeLabelParent.children[segment].getComponent(cc.Label).string
+
+        if(segmentLabel == "Respin"){
+            cc.log("you got Respin")
+            this.lastResult += this.playCost;
+            cc.sys.localStorage.setItem("CoinCount", this.lastResult.toString());
+            this.coinMessage.getComponent(cc.Label).string = "+"+ this.playCost.toString()
+            this.coinMessage.getComponent(cc.Animation).play();
+
+            this.startSpin()
+
+        }
+        else if(segmentLabel == "JackPot"){
+            cc.log("you got jackpot")
+            this.jackpotWonValue = this.playCost*this.jackpotReward;
+            this.lastResult += this.jackpotWonValue
+            cc.sys.localStorage.setItem("CoinCount", this.lastResult.toString());
+            this.coinMessage.getComponent(cc.Label).string = "+"+ this.jackpotWonValue.toString()
+            this.coinMessage.getComponent(cc.Animation).play();
+        }
+        else{
+            
+            const prizeValue = Number(this.prizeLabels[segment]);
+            const newCoinCount = this.lastResult + prizeValue;
+
+            this.lastResult = Math.max(newCoinCount, 0);
+            this.finalResult = this.lastResult.toString();
+            cc.log("you got" + prizeValue)
+
+            cc.sys.localStorage.setItem("CoinCount", this.finalResult);
+
+            this.coinMessage.getComponent(cc.Label).string = "+"+ prizeValue.toString()
+            this.coinMessage.getComponent(cc.Animation).play();
+
+        }
+
+    }
+
+
+    randomValue(){
+        this.prizeLabels = []
+
+        cc.log(this.prizeCount)
+
+        for (let i = 0; i < this.prizeCount; i++) {
+            this.IamRandom = Math.floor(Math.random() * (-20-50)+50);
+
+            let randomJackPot = Math.floor(Math.random()*10);
+            let randomRespin = Math.floor(Math.random()*5);
+
+            if (randomJackPot == 2) {
+                this.prizeLabelParent.children[i].getComponent(cc.Label).string= "JackPot"
+                this.prizeLabels.push(this.prizeLabelParent.children[i].getComponent(cc.Label).string)
+            }
+
+            else if (randomRespin == 2) {
+                this.prizeLabelParent.children[i].getComponent(cc.Label).string= "Respin"
+                this.prizeLabels.push(this.prizeLabelParent.children[i].getComponent(cc.Label).string)
+            }
+            else{
+                this.prizeLabelParent.children[i].getComponent(cc.Label).string = this.IamRandom.toString();
+                this.prizeLabels.push(this.prizeLabelParent.children[i].getComponent(cc.Label).string) 
+            }
+    
+
+            cc.log(this.prizeLabels[i]+" these are the values after generating random " )
+        }
+
+        // this.jackpotGenerator()
+        // this.RespinGenerator()
+       
+
+
+        
+    }
+
+
+
     
 }

@@ -1,0 +1,57 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "CoinMessageDisplaySlide",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.25,
+  "sample": 24,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -383,
+            204,
+            0
+          ],
+          "curve": [
+            0.06,
+            0.12,
+            0.3904693140794223,
+            1
+          ]
+        },
+        {
+          "frame": 0.625,
+          "value": [
+            -383,
+            258,
+            0
+          ]
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.625,
+          "value": 255
+        },
+        {
+          "frame": 0.8333333333333334,
+          "value": 255
+        },
+        {
+          "frame": 1.25,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}

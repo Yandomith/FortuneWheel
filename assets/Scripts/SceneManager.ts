@@ -68,6 +68,7 @@ export default class SceneManager extends cc.Component {
         this.currentPrefabInstance = cc.instantiate(prefab);
         this.node.addChild(this.currentPrefabInstance);
     }
+    
     onGameBackButtonClick() {
         this.loadLoading(this.menuPrefab); 
     }

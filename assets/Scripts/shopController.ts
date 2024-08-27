@@ -1,3 +1,5 @@
+import AudioManager from "./AudioManager";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -22,6 +24,9 @@ export default class ShopController extends cc.Component {
     @property(cc.Node)
     coinStat : cc.Node= null ;
 
+    buyPack :number = null;
+
+    previousCoinValue: number = Number(cc.sys.localStorage.getItem("CoinCount")) || 0;
 
     onClickShopClose(){
         cc.tween(this.node)
@@ -32,23 +37,11 @@ export default class ShopController extends cc.Component {
             .start()
        
     }
-    onClick(event :cc.Event , data: string){
-        
+    onClickShop(event :cc.Event , data: string){
+        cc.log("I am " + data)
+        this.buyPack = Number(data)
+        this.previousCoinValue =this.previousCoinValue + this.buyPack
+        cc.sys.localStorage.setItem("CoinCount", this.previousCoinValue);   
+        AudioManager.getInstance().playCoinCollectSFX();    
     }
-    
-    onClickbuy5(){
-        cc.log( " bought 5 ");
-
-    }
-    onClickbuy15(){
-        cc.log( " bought 15 ");
-    }
-    
-    onClickbuy30(){
-        cc.log( " bought 30 ");
-    }
-    
-
-
-
 }

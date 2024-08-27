@@ -1,24 +1,16 @@
-
-const {ccclass, property} = cc._decorator;
-
-
-// const audioQues = {
-//     SET :""
-// }
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class AudioManager extends cc.Component {
-    private static instance : AudioManager =  null;
+    private static instance: AudioManager = null;
 
     public static getInstance(): AudioManager {
         if (!AudioManager.instance) {
-
             AudioManager.instance = cc.find('AudioManager')?.getComponent(AudioManager);
             if (!AudioManager.instance) {
-
                 const newAudioManager = new cc.Node('AudioManager');
                 AudioManager.instance = newAudioManager.addComponent(AudioManager);
-                cc.director.getScene().addChild(newAudioManager); 
+                cc.director.getScene().addChild(newAudioManager);
             }
         }
         return AudioManager.instance;
@@ -26,73 +18,81 @@ export default class AudioManager extends cc.Component {
 
     @property(cc.Node)
     bgSFXNode: cc.Node = null;
-    
-    @property(cc.Node)
-    buttonSFXNode : cc.Node = null;
-
-    BgSFXvalue: Boolean= null;
-    AudioSFXvalue: Boolean= null;
-    boolBGSFX : Boolean = null;
 
     @property(cc.Node)
-    wheelSFXNode : cc.Node = null;
+    buttonSFXNode: cc.Node = null;
 
-    protected start(): void {
+    @property(cc.Node)
+    wheelSFXNode: cc.Node = null;
 
+    @property(cc.Node)
+    coinCollect: cc.Node = null;
+
+    private bgSFXEnabled: boolean = null;
+    private audioSFXEnabled: boolean = null;
+
+    protected onLoad(): void {
         if (AudioManager.instance) {
             cc.log('More than one instance of AudioManager found! Destroying this instance.');
             this.node.destroy();
             return;
         }
-        AudioManager.instance = this; 
-        const hehe = cc.sys.localStorage.getItem("BgSFX") 
-        this.boolBGSFX = hehe === "true";
-        if(this.boolBGSFX){
-            cc.log(this.boolBGSFX+ " this is value of BgSFX in start for loging music ")
-            this.bgSFXNode.getComponent(cc.AudioSource).play()
-        }else{
-            cc.log(this.boolBGSFX+ " this is value of BgSFX in start for loging music in else")
+
+        AudioManager.instance = this;
+
+        this.bgSFXEnabled = cc.sys.localStorage.getItem("BgSFX") === "true";
+        this.audioSFXEnabled = cc.sys.localStorage.getItem("AudioSFX") === "true";
+
+        if (this.bgSFXEnabled) {
+            this.playBgSFX();
         }
     }
 
-    protected onLoad(): void {
+    private playBgSFX(): void {
+        const bgAudioSource = this.bgSFXNode.getComponent(cc.AudioSource);
 
+        if (!bgAudioSource.isPlaying) {
+            bgAudioSource.play();
+        }
     }
 
+    public bgSFXtoggle(enabled: boolean): void {
+        this.bgSFXEnabled = enabled;
+        cc.sys.localStorage.setItem("BgSFX", String(this.bgSFXEnabled));
 
-    bgSFXtoggle(musictogglerValue: Boolean){
-        this.BgSFXvalue = musictogglerValue  
-        this.bgSFXNode.getComponent(cc.AudioSource).play()
-
-        cc.sys.localStorage.setItem("BgSFX",this.BgSFXvalue )
-
-        if (this.BgSFXvalue) {
-            cc.log(this.BgSFXvalue)
-            this.bgSFXNode.getComponent(cc.AudioSource).resume()
+        const bgAudioSource = this.bgSFXNode.getComponent(cc.AudioSource);
+        if (this.bgSFXEnabled) {
+            if (!bgAudioSource.isPlaying) {
+                bgAudioSource.play();
+            } else {
+                bgAudioSource.resume();
+            }
         } else {
-
-                this.bgSFXNode.getComponent(cc.AudioSource).pause()
+            bgAudioSource.pause();
         }
     }
 
-
-    buttonSFXtoggle(sfxtogglerValue:Boolean){
-        this.AudioSFXvalue = sfxtogglerValue  
-        cc.sys.localStorage.setItem("AudioSFX", this.AudioSFXvalue )
-        cc.log("sfx is toggled ")  
+    public buttonSFXtoggle(enabled: boolean): void {
+        this.audioSFXEnabled = enabled;
+        cc.sys.localStorage.setItem("AudioSFX", String(this.audioSFXEnabled));
+        cc.log("SFX toggled: " + this.audioSFXEnabled);
     }
 
-
-    sfxEffect(){
-        if(this.AudioSFXvalue){
-            this.buttonSFXNode.getComponent(cc.AudioSource).play()
-        }
-    }
-    WheelsfxEffect(){
-        if(this.AudioSFXvalue){
-            this.wheelSFXNode.getComponent(cc.AudioSource).play()
+    public playButtonSFX(): void {
+        if (this.audioSFXEnabled) {
+            this.buttonSFXNode.getComponent(cc.AudioSource).play();
         }
     }
 
+    public playWheelSFX(): void {
+        if (this.audioSFXEnabled) {
+            this.wheelSFXNode.getComponent(cc.AudioSource).play();
+        }
+    }
 
+    public playCoinCollectSFX(): void {
+        if (this.audioSFXEnabled) {
+            this.coinCollect.getComponent(cc.AudioSource).play();
+        }
+    }
 }

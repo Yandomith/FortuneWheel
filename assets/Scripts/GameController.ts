@@ -11,7 +11,7 @@ export default class GameController extends cc.Component {
 
  
     onClickCloseButton(){
-        AudioManager.getInstance().sfxEffect();  
+        AudioManager.getInstance().playButtonSFX();  
         SceneManager.getInstance().onGameBackButtonClick()
     }
 

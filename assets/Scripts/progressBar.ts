@@ -21,15 +21,8 @@ export default class progressBar extends cc.Component {
 
     protected start(): void {
 
-        cc.log("hehe")
-        cc.log("this is from start " + this.isfromMenu)
-        this.playLoader(this.isfromMenu)
-
-    }
-
-    playLoader(isfromMenu:Boolean){
         this.progressBar= this.progressBarNode.getComponent(cc.ProgressBar)
-        cc.log("isfromMenu is " + isfromMenu)
+       
         if (this.progressBar.progress == 1 ){
 
 
@@ -37,21 +30,10 @@ export default class progressBar extends cc.Component {
             cc.tween(this.progressBar)
                     .to(0.5, { progress: .5  },{easing:"easeInOut"})
                     .to(1, { progress: 1  },{easing:"easeOut"})
-                    .call(() =>{
-                        if (this.isfromMenu) {
-                            SceneManager.getInstance().loadGamePrefab();
-                        }else{
-                            SceneManager.getInstance().loadLobbyPrefab();
-                        }
-                    })
                     .start()
         }   
     }
     
-    public setIsfromMenu(value:boolean){
-        this.isfromMenu=value
-        cc.log("this is setisfromMenu" + this.isfromMenu)
-    }
- 
+
     
 }   

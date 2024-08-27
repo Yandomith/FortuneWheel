@@ -1064,7 +1064,7 @@
       "__id__": 22
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 27
@@ -1341,7 +1341,7 @@
     "_N$target": {
       "__id__": 23
     },
-    "_N$isChecked": true,
+    "_N$isChecked": false,
     "toggleGroup": null,
     "checkMark": {
       "__id__": 27
@@ -1360,7 +1360,7 @@
     },
     "component": "",
     "_componentId": "b9305uKWBhMT5eY8CJkYTUJ",
-    "handler": "onbgMusicToggled",
+    "handler": "onBgMusicToggled",
     "customEventData": ""
   },
   {
@@ -1563,7 +1563,7 @@
       "__id__": 35
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 40
@@ -1840,7 +1840,7 @@
     "_N$target": {
       "__id__": 36
     },
-    "_N$isChecked": true,
+    "_N$isChecked": false,
     "toggleGroup": null,
     "checkMark": {
       "__id__": 40
@@ -3314,7 +3314,7 @@
         "__id__": 136
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 146
@@ -4053,8 +4053,8 @@
     },
     "component": "",
     "_componentId": "87dd55EpsFLhYDlRuQb6Tfx",
-    "handler": "onClick",
-    "customEventData": ""
+    "handler": "onClickShop",
+    "customEventData": "5"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -4590,8 +4590,8 @@
     },
     "component": "",
     "_componentId": "87dd55EpsFLhYDlRuQb6Tfx",
-    "handler": "onClickbuy15",
-    "customEventData": ""
+    "handler": "onClickShop",
+    "customEventData": "15"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -5127,8 +5127,8 @@
     },
     "component": "",
     "_componentId": "87dd55EpsFLhYDlRuQb6Tfx",
-    "handler": "onClickbuy30",
-    "customEventData": ""
+    "handler": "onClickShop",
+    "customEventData": "30"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -6539,10 +6539,10 @@
     "sfxToggler": {
       "__id__": 45
     },
-    "ExitButton": {
+    "exitButton": {
       "__id__": 59
     },
-    "openShop": {
+    "openShopButton": {
       "__id__": 81
     },
     "shop": {
