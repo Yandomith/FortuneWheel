@@ -26,8 +26,6 @@ export default class ShopController extends cc.Component {
 
     buyPack :number = null;
 
-    previousCoinValue: number = Number(cc.sys.localStorage.getItem("CoinCount")) || 0;
-
     onClickShopClose(){
         cc.tween(this.node)
             .to(.1, {scale : 0})
@@ -38,10 +36,16 @@ export default class ShopController extends cc.Component {
        
     }
     onClickShop(event :cc.Event , data: string){
+
+        let previousCoinValue: number = Number(cc.sys.localStorage.getItem("CoinCount")) || 0;
         cc.log("I am " + data)
         this.buyPack = Number(data)
-        this.previousCoinValue =this.previousCoinValue + this.buyPack
-        cc.sys.localStorage.setItem("CoinCount", this.previousCoinValue);   
+
+        cc.log(this.buyPack)
+        cc.log(previousCoinValue)
+        
+        previousCoinValue =previousCoinValue + this.buyPack
+        cc.sys.localStorage.setItem("CoinCount", previousCoinValue);   
         AudioManager.getInstance().playCoinCollectSFX();    
     }
 }

@@ -1,7 +1,7 @@
-export enum GAME_STATE {
+export enum WheelState {
     Idle, 
     Spinning,
+    Respining,
     SpinStop,
     Reward,
 }
-
