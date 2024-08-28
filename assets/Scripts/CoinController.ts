@@ -106,14 +106,21 @@ export default class CoinController extends cc.Component {
     addCoins(amount: number) {
         this.lastResult += amount;
         this.lastResult = Math.max(this.lastResult, 0);
-        this.updateCoinMessage(`+${amount}`);
+        this.updateCoinMessage(`${amount}`);
         cc.sys.localStorage.setItem("CoinCount", this.lastResult.toString());
     }
 
     private updateCoinMessage(message: string) {
+        if(message.charAt(0) == "-"){
+            this.coinMessage.color   =cc.Color.RED;
+            this.coinMessage.getComponent(cc.Label).string = message;
+            this.coinMessage.getComponent(cc.Animation).play();
+        }
+        else{
+            this.coinMessage.color   =cc.Color.GREEN;
+            this.coinMessage.getComponent(cc.Label).string = "+" +message;
+            this.coinMessage.getComponent(cc.Animation).play();        }
 
-        this.coinMessage.getComponent(cc.Label).string = message;
-        this.coinMessage.getComponent(cc.Animation).play();
     }
 
     getLastResult() {

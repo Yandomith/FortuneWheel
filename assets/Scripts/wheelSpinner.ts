@@ -352,6 +352,7 @@ export default class WheelSpinner extends cc.Component {
             cc.log("Wheel is already spinning or has not stopped properly.");
             return;
         }
+        
         if (this.coinController && this.coinController.canSpin()) {
             AudioManager.getInstance().playButtonSFX();
             this.SpinController.startSpin();

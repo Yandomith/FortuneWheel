@@ -200,14 +200,12 @@ export default class ResultController extends cc.Component {
             this.spinController.changeWheelState(WheelState.Respining);
             return;
         }
+
         this.timerDisplay.active = true;
         this.scheduleOnce(() => {
 
             this.scheduleNextSpin();
-        }, 2.5)
-
-
-
+        }, 2)
         
 
     }
